@@ -8,9 +8,14 @@ import {
   Divider,
   Grid,
   Container,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  TextField,
+  DialogActions,
 } from "@material-ui/core";
 import { makeStyles, createStyles } from "@material-ui/core/styles";
-import { ArrowUpward, ArrowDownward, ImportExport } from "@material-ui/icons";
+import { ArrowUpward, ArrowDownward, Edit } from "@material-ui/icons";
 const useStyles = makeStyles(() =>
   createStyles({
     card: {
@@ -39,8 +44,45 @@ const useStyles = makeStyles(() =>
   })
 );
 
+function InputDialog({
+  repeaterCount,
+  setRepeaterCount,
+  isOpen,
+  setIsOpen,
+}: {
+  repeaterCount: number;
+  setRepeaterCount: React.Dispatch<React.SetStateAction<number>>;
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}) {
+  const handleClose = () => setIsOpen(false);
+
+  return (
+    <Dialog open={isOpen} onClose={handleClose}>
+      <DialogTitle>Enter number</DialogTitle>
+      <DialogContent>
+        <TextField
+          autoFocus
+          margin="dense"
+          id="number"
+          name="repeater number"
+          label="Repeater Number"
+          placeholder="5"
+          value={repeaterCount}
+          type="number"
+          onChange={(e) => setRepeaterCount(parseInt(e.target.value))}
+        ></TextField>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={handleClose}>OK</Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
 function App() {
   const [repeaterCount, setRepeaterCount] = useState(1);
+  const [dialogOpen, setDialogOpen] = useState(false);
   const classes = useStyles();
 
   return (
@@ -66,8 +108,8 @@ function App() {
                 <Button onClick={() => addCount(-1)}>
                   <ArrowDownward />
                 </Button>
-                <Button onClick={textBoxInput}>
-                  <ImportExport />
+                <Button onClick={() => setDialogOpen(true)}>
+                  <Edit />
                 </Button>
               </ButtonGroup>
             </Grid>
@@ -108,6 +150,12 @@ function App() {
           Made by Honbra <br /> Special thanks to Tokfrans03 for the item
           displays and StayWithMeSenpai for the rounding.
         </Typography>
+        <InputDialog
+          repeaterCount={repeaterCount}
+          setRepeaterCount={setRepeaterCount}
+          isOpen={dialogOpen}
+          setIsOpen={setDialogOpen}
+        />
       </div>
     </Container>
   );
@@ -119,21 +167,6 @@ function App() {
   function prettyStacks(i: number) {
     // thanks Tokfrans03
     return `${Math.floor(i / 64)} x64 + ${i % 64}`;
-  }
-
-  function textBoxInput() {
-    // ok boomer w0w4n
-    var count = prompt("Repeaters", repeaterCount.toString());
-
-    if (
-      count == null ||
-      count === "" ||
-      isNaN(parseInt(count)) ||
-      parseInt(count) < 1
-    ) {
-    } else {
-      setRepeaterCount(parseInt(count));
-    }
   }
 }
 

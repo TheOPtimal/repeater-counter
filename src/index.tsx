@@ -6,9 +6,13 @@ import reportWebVitals from "./reportWebVitals";
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { theme } from "./theme";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import json2mq from "json2mq";
 
 function Root() {
-  const [darkState] = useState(true);
+  const [darkState] = useState(
+    useMediaQuery(json2mq({ prefersColorScheme: "dark" }))
+  );
   const palletType = darkState ? "dark" : "light";
   return (
     <ThemeProvider theme={theme(palletType)}>
